@@ -131,12 +131,21 @@ cleanup() {
   phase_log "Cleaning up after installation..."
 }
 
+start_services() {
+  phase_log "Staring Xvfb service..."
+  service xvfb start
+
+  phase_log "Starting selenium service..."
+  service selenium start
+}
+
 setup_testagent() {
   check_prerequisites
   install_packages
   install_angularjs
   install_runlevel_scripts
   cleanup
+  start_services
 }
 
 setup_testagent "$@"
