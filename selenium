@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# Selenium standalone server init script.
+# Credit: https://www.exratione.com/2013/12/angularjs-headless-end-to-end-testing-with-protractor-and-selenium/
+#
+# For Debian-based distros.
+#
+### BEGIN INIT INFO
+# Provides:          selenium-standalone
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Selenium standalone server
+### END INIT INFO
+
+DESC="Selenium standalone server"
+USER=selenium
+JAVA=/usr/bin/java
+PID_FILE=/var/run/selenium.pid
+JAR_FILE=/usr/local/lib/selenium/selenium-server-standalone.jar
+LOG_FILE=/var/log/selenium/selenium.log
+WEB_BROWSER=/usr/bin/google-chrome
+WEB_DRIVER=/usr/local/bin/chromedriver
+DAEMON_OPTS="-jar $JAR_FILE -log $LOG_FILE -Dwebdriver.chrome.bin=$WEB_BROWSER -Dwebdriver.chrome.driver=$WEB_DRIVER"
+
+# DISPLAY value must match with that in Xvfb
+export DISPLAY=:1.1
+
+case "$1" in
+    start)
+        echo "Starting $DESC: "
+        start-stop-daemon -c $USER --start --background \
+            --pidfile $PID_FILE --make-pidfile --exec $JAVA -- $DAEMON_OPTS
+#echo -c $USER --start --background --pidfile $PID_FILE --make-pidfile --exec $JAVA -- $DAEMON_OPTS
+        ;;
+ 
+    stop)
+        echo  "Stopping $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+        ;;
+ 
+    restart)
+        echo "Restarting $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+        sleep 1
+        start-stop-daemon -c $USER --start --background \
+            --pidfile $PID_FILE  --make-pidfile --exec $JAVA -- $DAEMON_OPTS
+        ;;
+ 
+    *)
+        echo "Usage: /etc/init.d/selenium-standalone {start|stop|restart}"
+        exit 1
+    ;;
+esac
+ 
+exit 0
