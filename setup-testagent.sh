@@ -65,7 +65,7 @@ install_packages() {
   # Instll selenium.
   phase_log "Installing selenium..."
   useradd -m -s /bin/bash -d /home/selenium selenium
-  sudo -u selenium mkdir -p /usr/local/lib/selenium
+  mkdir -p /usr/local/lib/selenium
   chown -R selenium:selenium /usr/local/lib/selenium/
   mkdir -p /var/log/selenium
   chown -R selenium:selenium /var/log/selenium/
@@ -127,11 +127,19 @@ install_runlevel_scripts() {
   update-rc.d  selenium defaults
 }
 
+cleanup() {
+  phase_log "Cleaning up after installation..."
+  # Some npm installs create a tmp directory (owned by root) in the user's home directory.
+  homedir=$(sudo $angular_owner echo $HOME)
+  rm -Rf $homedir/tmp
+}
+
 setup_testagent() {
   check_prerequisites
   install_packages
   install_angularjs
   install_runlevel_scripts
+  cleanup
 }
 
 setup_testagent "$@"

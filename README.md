@@ -1,13 +1,25 @@
 angularjs-testagent
 ===================
 
-Scripts to set up a Linux host with headless X-window for AngularJS unit and e2e testing using Karma and Protractor frameworks.
+Install and setup an Ubuntu host as a headless (X-window) test agent for Angular unit and e2e testing using Karma and Protractor.
 
 ## Use
 
+Install and set up the environment.
+
 ```sh
-$ sudo curl -sSL https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/setup-testagent.sh | bash
+$ curl -sSL https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/setup-testagent.sh | sudo bash
 ```
+
+The script will perform the following operations:
+
+1. 
+
+You can test if Karma is working by running the following:
+
+
+You can test if Protractor is working by running the following:
+
 
 ## Further work
 
