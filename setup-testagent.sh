@@ -109,8 +109,8 @@ install_angularjs() {
   # Install node modules.
   phase_log "Install node.js modules..."
   cd $angular_project_root_dir/angular-seed
-  npm install -g protractor
   sudo -u $angular_owner npm install
+  npm install -g protractor
 }
 
 install_runlevel_scripts() {
@@ -129,9 +129,6 @@ install_runlevel_scripts() {
 
 cleanup() {
   phase_log "Cleaning up after installation..."
-  # Some npm installs create a tmp directory (owned by root) in the user's home directory.
-  homedir=$(sudo $angular_owner echo $HOME)
-  rm -Rf $homedir/tmp
 }
 
 setup_testagent() {
