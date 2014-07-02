@@ -6,10 +6,9 @@ Scripts to set up a Linux host with headless X-window for AngularJS unit and e2e
 ## Use
 
 ```sh
-$ sudo ./setup-testagent.sh
+$ sudo curl -sSL https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/setup-testagent.sh | bash
 ```
 
 ## Further work
 
-* Add runlevel script (/etc/init.d) to autostart xvfb and selenium
-* Write Chef cookbook
+* Write Chef cookbook to install/configure a headless host for CI and automated testing AngularJS code.

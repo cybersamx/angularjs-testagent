@@ -64,10 +64,14 @@ install_packages() {
 
   # Instll selenium.
   phase_log "Installing selenium..."
-  mkdir -p /usr/local/lib/selenium
+  useradd -m -s /bin/bash -d /home/selenium selenium
+  sudo -u selenium mkdir -p /usr/local/lib/selenium
+  chown -R selenium:selenium /usr/local/lib/selenium/
+  mkdir -p /var/log/selenium
+  chown -R selenium:selenium /var/log/selenium/
   cd /usr/local/lib/selenium
-  wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.2.jar
-  ln -s selenium-server-standalone-2.42.2.jar selenium-server-standalone.jar
+  sudo -u selenium wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.2.jar
+  sudo -u selenium ln -s selenium-server-standalone-2.42.2.jar selenium-server-standalone.jar
 } 
 
 install_angularjs() {
@@ -109,10 +113,25 @@ install_angularjs() {
   sudo -u $angular_owner npm install
 }
 
+install_runlevel_scripts() {
+  phase_log "Installing and configuring xvfb runlevel script..."
+  cd /etc/init.d
+  wget "https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/xvfb"
+  chmod a+x xvfb
+  update-rc.d xvfb defaults
+
+  phase_log "Installing and configuring selenium runlevel script..."
+  cd /etc/init.d
+  wget "https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/selenium"
+  chmod a+x selenium
+  update-rc.d  selenium defaults
+}
+
 setup_testagent() {
   check_prerequisites
   install_packages
   install_angularjs
+  install_runlevel_scripts
 }
 
 setup_testagent "$@"
