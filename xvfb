@@ -23,7 +23,7 @@ DESC="$NAME - X Virtual Frame Buffer"
 SCRIPTNAME=/etc/init.d/$NAME
 XVFB=/usr/bin/Xvfb
 PIDFILE=/var/run/${NAME}.pid
-XVFB_ARGS=":1 -extension RANDR -noreset -ac -screen 1 800x600x16"
+XVFB_ARGS=
 
 set -e
  

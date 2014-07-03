@@ -9,20 +9,25 @@ shopt -s extglob  # Extend pattern matching
 
 angular_owner=ubuntu
 angular_project_root_dir=/home/ubuntu/src
+display=1
+screen=1
+resolution="800x600x16"
 
 # --- Functions ---
 
 which_cmd() { which "$@" || return $?; true; }
 phase_log() { printf "$(tput bold)$(tput setaf 1)$*$(tput sgr 0)\n"; }
 
-# -- Main Function ---
-
-check_prerequisites() {
+check_for_root() {
   if [ ${EUID} != 0 ]
   then
-    echo "Run as user ubuntu, and run the script with sudo"
+    echo "Run this script with root using sudo..."
     exit
   fi
+}
+
+check_prerequisites() {
+  check_for_root
 
   which_cmd wget > /dev/null || {
     echo "This script requires 'wget'. Please install 'wget' and try again."
@@ -116,13 +121,16 @@ install_angularjs() {
 install_runlevel_scripts() {
   phase_log "Installing and configuring xvfb runlevel script..."
   cd /etc/init.d
-  wget "https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/xvfb"
+  wget https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/xvfb
+  sed -i "s/export\ DISPLAY\=\:1\.1/export\ DISPLAY\=\:$display\.$screen/" selenium
   chmod a+x xvfb
   update-rc.d xvfb defaults
 
+
   phase_log "Installing and configuring selenium runlevel script..."
   cd /etc/init.d
-  wget "https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/selenium"
+  wget https://raw.githubusercontent.com/cybersamx/angularjs-testagent/master/selenium
+  sed -i "s/XVFB_ARGS=/XVFB_ARGS=\"\:$display -extension RANDR -noreset -ac -screen $screen $resolution\"/" xvfb
   chmod a+x selenium
   update-rc.d  selenium defaults
 }
@@ -138,6 +146,8 @@ start_services() {
   phase_log "Starting selenium service..."
   service selenium start
 }
+
+# -- Main Function ---
 
 setup_testagent() {
   check_prerequisites

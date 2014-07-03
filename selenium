@@ -32,7 +32,6 @@ case "$1" in
         echo "Starting $DESC: "
         start-stop-daemon -c $USER --start --background \
             --pidfile $PID_FILE --make-pidfile --exec $JAVA -- $DAEMON_OPTS
-#echo -c $USER --start --background --pidfile $PID_FILE --make-pidfile --exec $JAVA -- $DAEMON_OPTS
         ;;
  
     stop)
