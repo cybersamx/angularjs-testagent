@@ -47,4 +47,5 @@ $ npm run protractor
 
 I have only tested the script in Ubuntu 14 on AWS EC2.
 
+* Write a Dockerfile for this operation. It should be cleaner.
 * Write Chef cookbook to install/configure a headless host for CI and automated testing AngularJS code.
